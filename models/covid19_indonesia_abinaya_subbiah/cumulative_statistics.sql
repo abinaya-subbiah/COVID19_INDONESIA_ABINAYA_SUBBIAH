@@ -1,6 +1,16 @@
 
 
 -- This is a cummulative view which shows details of active cases, death and recovery rates along with cumulatives of few columns
+WITH AC_DETAILS AS
+(
+
+    SELECT * FROM {{ ref('active_cases') }}
+),
+WITH DRD_DETAILS AS
+(
+
+    SELECT * FROM {{ ref('death_recovery_details') }}
+)
 
 select 
     AC.DATE,
@@ -26,6 +36,6 @@ select
     SUM(DRD.NEW_DEATHS) OVER (PARTITION BY DRD.LOCATION_DETAILS_ID ORDER BY DRD.DATE ASC) AS CUMULATION_NEW_DEATHS,
     SUM(DRD.NEW_RECOVERED) OVER (PARTITION BY DRD.LOCATION_DETAILS_ID ORDER BY DRD.DATE ASC) AS CUMULATION_NEW_RECOVERED  
 from 
-{{ ref('active_cases') }} AC LEFT JOIN
-{{ ref('death_recovery_details') }} DRD ON AC.DATE = DRD.DATE AND AC.LOCATION_DETAILS_ID = DRD.LOCATION_DETAILS_ID
+AC_DETAILS AC LEFT JOIN
+DRD_DETAILS DRD ON AC.DATE = DRD.DATE AND AC.LOCATION_DETAILS_ID = DRD.LOCATION_DETAILS_ID
 ORDER BY AC.LOCATION_DETAILS_ID, AC.DATE
