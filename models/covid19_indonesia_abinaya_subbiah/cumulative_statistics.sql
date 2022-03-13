@@ -1,6 +1,8 @@
 
 
 -- This is a cummulative view which shows details of active cases, death and recovery rates along with cumulatives of few columns
+
+{{ config(materialized='view') }}
 WITH AC_DETAILS AS
 (
 
