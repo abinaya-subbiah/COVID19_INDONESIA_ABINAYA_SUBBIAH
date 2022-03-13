@@ -6,7 +6,7 @@ WITH AC_DETAILS AS
 
     SELECT * FROM {{ ref('active_cases') }}
 ),
-WITH DRD_DETAILS AS
+DRD_DETAILS AS
 (
 
     SELECT * FROM {{ ref('death_recovery_details') }}
