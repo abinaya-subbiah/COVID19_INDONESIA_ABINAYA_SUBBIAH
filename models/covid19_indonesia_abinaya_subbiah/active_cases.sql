@@ -1,0 +1,24 @@
+
+/*
+    This is a fact table which has details of active cases and new cases day by day
+*/
+
+{{ config(materialized='table') }}
+
+SELECT
+    DATE,
+    LOC.LOCATION_DETAILS_ID,
+    TOTAL_CASES,
+    TOTAL_ACTIVE_CASES,
+    TOTAL_CASES_PER_MILLION,
+    NEW_CASES,
+    NEW_ACTIVE_CASES,
+    NEW_CASES_PER_MILLION,
+    CASE_FATALITY_RATE,
+    GROWTH_FACTOR_OF_NEW_CASES
+FROM "FIVETRAN_INTERVIEW_DB"."GOOGLE_SHEETS"."COVID_19_INDONESIA_ABINAYA_SUBBIAH" SRC LEFT JOIN 
+ref{{ 'location_details' }} LOC ON 
+LOC.LOCATION = SRC.LOCATION AND COALESCE(LOC.PROVINCE,'INDONESIA') = COALESCE(SRC.PROVINCE,'INDONESIA')
+
+
+
